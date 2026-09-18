@@ -790,6 +790,11 @@ int on_udp_tunnel(struct poolhd *pool, struct eval *val, int et)
                 LOG(LOG_E, "udp parse error\n");
                 return -1;
             }
+            if (params.quic_block
+                    && addr.in.sin_port == htons(443)) {
+                LOG(LOG_S, "quic-block: drop udp/443\n");
+                continue;
+            }
             if (!pair->addr.in.sin_port) {
                 if (params.baddr.sa.sa_family == AF_INET6) {
                     map_fix(&addr, 6);
